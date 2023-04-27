@@ -30,6 +30,10 @@ class Ecommerce:
             print(f"{quantity} units of product with id {product_id} was purchased for {price} a unit")
 
 
+    """
+            order_product function if quantity specified is lower or equal to quantity in stock it subtracts the amount
+            ordered, but if its more it gives a message to the client that there is not enough in stock
+    """
     def order_product(self, product_id, quantity):
         if product_id not in self.products:
             print(f"No product with id {product_id} found")
@@ -37,9 +41,13 @@ class Ecommerce:
             print(f"There is not enough of the product with id {product_id} in stock")
         else:
             self.products[product_id]['quantity'] -= quantity
-            print(f"Product with the id {product_id} ordered successfully")
+            print(f"{quantity} units of product with the id {product_id} ordered successfully")
 
-
+    def get_quantity_of_product(self, product_id):
+        if product_id not in self.products:
+            print(f"No product with id {product_id} found")
+        else:
+            print(f"There is {self.products[product_id]['quantity']} units in the stock")
 
 if __name__ == '__main__':
     ecom = Ecommerce()
@@ -53,6 +61,8 @@ if __name__ == '__main__':
             ecom.purchase_product(part[1], int(part[2]), float(part[3]))
         elif part[0] == "order_product":
             ecom.order_product(part[1], int(part[2]))
+        elif part[0] == "get_quantity_of_product":
+            ecom.get_quantity_of_product(part[1])
         elif part[0] == "exit":
             break
         else:
