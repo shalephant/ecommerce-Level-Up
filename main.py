@@ -43,11 +43,32 @@ class Ecommerce:
             self.products[product_id]['quantity'] -= quantity
             print(f"{quantity} units of product with the id {product_id} ordered successfully")
 
+
+    """
+            prints the amount of product left in the stock, if there is such product
+    """
     def get_quantity_of_product(self, product_id):
         if product_id not in self.products:
             print(f"No product with id {product_id} found")
         else:
             print(f"There is {self.products[product_id]['quantity']} units in the stock")
+
+
+    """
+            for each purchase in purchase history we add up prices and quantity for those prices and divide
+            by the quantity of units that was purchased to get an average price
+    """
+    def get_average_price(self, product_id):
+        if product_id not in self.products:
+            print(f"No product with id {product_id} found")
+        else:
+            sum_of_money = 0
+            amount_purchased = 0
+            for purchase in self.purchases:
+                amount_purchased += purchase[0]
+                sum_of_money += purchase[1] * purchase[0]
+            average_price = sum_of_money/amount_purchased
+            print(f"The average price of that product would be {average_price}")
 
 if __name__ == '__main__':
     ecom = Ecommerce()
@@ -63,6 +84,8 @@ if __name__ == '__main__':
             ecom.order_product(part[1], int(part[2]))
         elif part[0] == "get_quantity_of_product":
             ecom.get_quantity_of_product(part[1])
+        elif part[0] == "get_average_price":
+            ecom.get_average_price(part[1])
         elif part[0] == "exit":
             break
         else:
