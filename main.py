@@ -30,6 +30,16 @@ class Ecommerce:
             print(f"{quantity} units of product with id {product_id} was purchased for {price} a unit")
 
 
+    def order_product(self, product_id, quantity):
+        if product_id not in self.products:
+            print(f"No product with id {product_id} found")
+        elif quantity > self.products[product_id]['quantity']:
+            print(f"There is not enough of the product with id {product_id} in stock")
+        else:
+            self.products[product_id]['quantity'] -= quantity
+            print(f"Product with the id {product_id} ordered successfully")
+
+
 
 if __name__ == '__main__':
     ecom = Ecommerce()
@@ -41,6 +51,8 @@ if __name__ == '__main__':
             ecom.save_product(part[1], part[2], float(part[3]))
         elif part[0] == "purchase_product":
             ecom.purchase_product(part[1], int(part[2]), float(part[3]))
+        elif part[0] == "order_product":
+            ecom.order_product(part[1], int(part[2]))
         elif part[0] == "exit":
             break
         else:
