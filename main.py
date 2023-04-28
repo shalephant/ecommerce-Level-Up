@@ -3,8 +3,8 @@ class Ecommerce:
 
     def __init__(self):
         self.products = {}
-        self.purchases = []
-        self.orders = []
+        self.purchases = {}
+        self.orders = {}
 
     """
         save_product function adds a new product to the catalog or updates existing products price and name
@@ -26,7 +26,7 @@ class Ecommerce:
         if product_id not in self.products:
             print(f"No product with id {product_id} found")
         else:
-            self.purchases.append((quantity, price))
+            self.purchases.setdefault(product_id, []).append((int(quantity), self.products[product_id]['price']))
             self.products[product_id]['quantity'] += int(quantity)
             print(f"{quantity} units of product with id {product_id} was purchased for {price} a unit")
 
@@ -41,10 +41,11 @@ class Ecommerce:
         elif quantity > self.products[product_id]['quantity']:
             print(f"There is not enough of the product with id {product_id} in stock")
         else:
-            self.orders.append((quantity, self.products[product_id]['price']))
+            self.orders.setdefault(product_id, []).append((int(quantity), self.products[product_id]['price']))
             self.products[product_id]['quantity'] -= quantity
 
             print(f"{quantity} units of product with the id {product_id} ordered successfully")
+            print(self.orders)
 
 
     """
@@ -82,7 +83,6 @@ class Ecommerce:
         if product_id not in self.products:
             print(f"No product with id {product_id} found")
         else:
-
             order_total_money = 0
             purchase_total_money =0
             amount_ordered = 0
@@ -114,6 +114,8 @@ class Ecommerce:
 
 
 
+
+
 if __name__ == '__main__':
     ecom = Ecommerce()
     print(ecom.products)
@@ -134,7 +136,8 @@ if __name__ == '__main__':
             ecom.get_product_profit(part[1])
         elif part[0] == "get_fewest_product":
             ecom.get_fewest_product()
-
+        elif part[0] == "get_most_popular_product":
+            ecom.get_most_popular_product()
         elif part[0] == "exit":
             break
         else:
