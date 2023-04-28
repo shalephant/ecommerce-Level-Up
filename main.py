@@ -100,6 +100,19 @@ class Ecommerce:
             print(f"Profit per unit is {profit_per_unit} and total profit from the orders is {total_profit}")
 
 
+    """
+            loop through products dictionary to and add quantities to list to find minimum quantity
+            and take the name from the list that has minimum quantity left
+    """
+    def get_fewest_product(self):
+        prod_quantities = [self.products[product]['quantity'] for product in self.products]
+        min_quantity = min(prod_quantities)
+        for product in self.products:
+            if self.products[product]['quantity'] == min_quantity:
+                fewest_product = self.products[product]['name']
+        print(f"Fewest product that is left is {fewest_product} with {min_quantity} units left")
+
+
 
 if __name__ == '__main__':
     ecom = Ecommerce()
@@ -119,6 +132,8 @@ if __name__ == '__main__':
             ecom.get_average_price(part[1])
         elif part[0] == "get_product_profit":
             ecom.get_product_profit(part[1])
+        elif part[0] == "get_fewest_product":
+            ecom.get_fewest_product()
 
         elif part[0] == "exit":
             break
