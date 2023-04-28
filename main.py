@@ -26,10 +26,10 @@ class Ecommerce:
         if product_id not in self.products:
             print(f"No product with id {product_id} found")
         else:
-            self.purchases.setdefault(product_id, []).append((int(quantity), self.products[product_id]['price']))
+            self.purchases.setdefault(product_id, []).append((int(quantity), float(price)))
             self.products[product_id]['quantity'] += int(quantity)
             print(f"{quantity} units of product with id {product_id} was purchased for {price} a unit")
-
+            print(self.purchases)
 
     """
             order_product function if quantity specified is lower or equal to quantity in stock it subtracts the amount
@@ -68,9 +68,9 @@ class Ecommerce:
         else:
             sum_of_money = 0
             amount_purchased = 0
-            for purchase in self.purchases:
-                amount_purchased += purchase[0]
-                sum_of_money += purchase[1] * purchase[0]
+            for quantity, price in self.purchases[product_id]:
+                amount_purchased += quantity
+                sum_of_money += price * quantity
             average_price = sum_of_money/amount_purchased
             print(f"The average price of that product would be {average_price}")
 
@@ -118,7 +118,6 @@ class Ecommerce:
 
 if __name__ == '__main__':
     ecom = Ecommerce()
-    print(ecom.products)
     while True:
         command = input("Enter a command:\n")
         part = command.split()
