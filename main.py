@@ -115,6 +115,25 @@ class Ecommerce:
 
 
 
+    """
+            loops through orders and adds up quantities of orders with same id and puts it to dictionary. 
+            Then takes total quantities to list to compare and choose which has maximum amount of orders.
+    """
+    def get_most_popular_product(self):
+        product_orders = {}
+        for product in self.orders:
+            product_orders.setdefault(product, int())
+            for quantity, price in self.orders[product]:
+                    product_orders[product] += quantity
+        print(product_orders)
+        order_amount_list = [product_orders[product] for product in product_orders]
+        max_order = max(order_amount_list)
+        for product in product_orders:
+            if product_orders[product] == max_order:
+                print(f"The most popular product is {self.products[product]['name']} with {max_order} orders")
+        print(order_amount_list)
+
+
 
 
 if __name__ == '__main__':
