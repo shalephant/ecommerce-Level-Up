@@ -96,7 +96,7 @@ class Ecommerce:
             order_average = order_total_money/amount_ordered
             purchase_average = purchase_total_money/amount_purchased
             profit_per_unit = order_average - purchase_average
-            total_profit = order_total_money - purchase_total_money
+            total_profit = profit_per_unit * amount_ordered
             print(f"Profit per unit is {profit_per_unit} and total profit from the orders is {total_profit}")
 
 
