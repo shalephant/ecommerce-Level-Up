@@ -20,7 +20,7 @@ class Ecommerce:
 
     """
             purchase_product function purchases an existing product, increasing the product quantity in products
-            catalog and adding quantity and price to the purchases list for the history
+            catalog and adding quantity and price to the purchases dictionary for the history
     """
     def purchase_product(self, product_id, quantity, price):
         if product_id not in self.products:
@@ -32,8 +32,9 @@ class Ecommerce:
             print(self.purchases)
 
     """
-            order_product function if quantity specified is lower or equal to quantity in stock it subtracts the amount
-            ordered, but if its more it gives a message to the client that there is not enough in stock
+            orders product if quantity specified is lower or equal to quantity in stock it subtracts the amount
+            ordered and adds quantity and price to the order history dictionary,
+            but if its more it gives a message to the client that there is not enough in stock
     """
     def order_product(self, product_id, quantity):
         if product_id not in self.products:
@@ -59,8 +60,8 @@ class Ecommerce:
 
 
     """
-            for each purchase in purchase history we add up prices and quantity for those prices and divide
-            by the quantity of units that was purchased to get an average price
+            for each purchase in purchase history we add up prices and quantity of specific product id
+             and divide by the quantity of units that was purchased to get an average price
     """
     def get_average_price(self, product_id):
         if product_id not in self.products:
@@ -87,12 +88,12 @@ class Ecommerce:
             purchase_total_money =0
             amount_ordered = 0
             amount_purchased = 0
-            for purchase in self.purchases:
-                amount_purchased += purchase[0]
-                purchase_total_money += purchase[1] * purchase[0]
-            for order in self.orders:
-                amount_ordered += order[0]
-                order_total_money += order[1] * order[0]
+            for quantity, price in self.purchases[product_id]:
+                amount_purchased += quantity
+                purchase_total_money += price * quantity
+            for quantity, price in self.orders[product_id]:
+                amount_ordered += quantity
+                order_total_money += price * quantity
             order_average = order_total_money/amount_ordered
             purchase_average = purchase_total_money/amount_purchased
             profit_per_unit = order_average - purchase_average
