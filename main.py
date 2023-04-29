@@ -1,6 +1,5 @@
 import csv
 class Ecommerce:
-
     def __init__(self):
         self.products = {}
         self.purchases = {}
@@ -13,10 +12,11 @@ class Ecommerce:
         if product_id in self.products:
             self.products[product_id]['name'] = product_name
             self.products[product_id]['price'] = product_price
-            print(f"Product with id {product_id} was updated")
+           # print(f"Product with id {product_id} was updated")
+
         else:
             self.products[product_id] = {'name': product_name, 'price': product_price, 'quantity': 0}
-            print(f"Product with id {product_id} was saved")
+           # print(f"Product with id {product_id} was saved")
 
     """
             purchase_product function purchases an existing product, increasing the product quantity in products
@@ -26,10 +26,10 @@ class Ecommerce:
         if product_id not in self.products:
             print(f"No product with id {product_id} found")
         else:
-            self.purchases.setdefault(product_id, []).append((int(quantity), float(price)))
+            self.purchases.setdefault(product_id, []).append((int(quantity), int(price)))
             self.products[product_id]['quantity'] += int(quantity)
-            print(f"{quantity} units of product with id {product_id} was purchased for {price} a unit")
-            print(self.purchases)
+           # print(f"{quantity} units of product with id {product_id} was purchased for {price} a unit")
+
 
     """
             orders product if quantity specified is lower or equal to quantity in stock it subtracts the amount
@@ -44,10 +44,7 @@ class Ecommerce:
         else:
             self.orders.setdefault(product_id, []).append((int(quantity), self.products[product_id]['price']))
             self.products[product_id]['quantity'] -= quantity
-
-            print(f"{quantity} units of product with the id {product_id} ordered successfully")
-            print(self.orders)
-
+           # print(f"{quantity} units of product with the id {product_id} ordered successfully")
 
     """
             prints the amount of product left in the stock, if there is such product
@@ -56,8 +53,9 @@ class Ecommerce:
         if product_id not in self.products:
             print(f"No product with id {product_id} found")
         else:
-            print(f"There is {self.products[product_id]['quantity']} units in the stock")
-
+           # print(f"There is {self.products[product_id]['quantity']} units in the stock")
+            print(self.products[product_id]['quantity'])
+            return int(self.products[product_id]['quantity'])
 
     """
             for each purchase in purchase history we add up prices and quantity of specific product id
@@ -73,8 +71,9 @@ class Ecommerce:
                 amount_purchased += quantity
                 sum_of_money += price * quantity
             average_price = sum_of_money/amount_purchased
-            print(f"The average price of that product would be {average_price}")
-            return average_price
+           # print(f"The average price of that product would be {average_price}")
+            print(int(average_price))
+            return int(average_price)
 
 
     """
@@ -99,8 +98,9 @@ class Ecommerce:
             purchase_average = purchase_total_money/amount_purchased
             profit_per_unit = order_average - purchase_average
             total_profit = profit_per_unit * amount_ordered
-            print(f"Profit per unit is {profit_per_unit} and total profit from the orders is {total_profit}")
-
+           # print(f"Profit per unit is {profit_per_unit} and total profit from the orders is {total_profit}")
+            print(int(total_profit))
+            return int(total_profit)
 
     """
             loop through products dictionary to and add quantities to list to find minimum quantity
@@ -112,9 +112,9 @@ class Ecommerce:
         for product in self.products:
             if self.products[product]['quantity'] == min_quantity:
                 fewest_product = self.products[product]['name']
-        print(f"Fewest product that is left is {fewest_product} with {min_quantity} units left")
-
-
+       # print(f"Fewest product that is left is {fewest_product} with {min_quantity} units left")
+        print(fewest_product)
+        return fewest_product
 
     """
             loops through orders and adds up quantities of orders with same id and puts it to dictionary. 
@@ -125,14 +125,15 @@ class Ecommerce:
         for product in self.orders:
             product_orders.setdefault(product, int())
             for quantity, price in self.orders[product]:
-                    product_orders[product] += quantity
-        print(product_orders)
+                product_orders[product] += quantity
         order_amount_list = [product_orders[product] for product in product_orders]
         max_order = max(order_amount_list)
         for product in product_orders:
             if product_orders[product] == max_order:
-                print(f"The most popular product is {self.products[product]['name']} with {max_order} orders")
-        print(order_amount_list)
+                popular_product = self.products[product]['name']
+               # print(f"The most popular product is {popular_product} with {max_order} orders")
+        print(popular_product)
+        return popular_product
 
 
     """
@@ -146,10 +147,18 @@ class Ecommerce:
                 product_id = product
                 product_name = self.products[product]['name']
                 quantity_sold = quantity
-                purchase_price = self.get_average_price(product_id)
-                cogs = quantity_sold*purchase_price
+
+                purchase_sum_of_money = 0
+                amount_purchased = 0
+                for q, p in self.purchases[product_id]:
+                    amount_purchased += quantity
+                    purchase_sum_of_money += q * p
+
+                purchase_average_price = int(purchase_sum_of_money / amount_purchased)
+                cogs = int(quantity_sold * purchase_average_price)
                 selling_price = price
-                orders_report.append((product_id,product_name,quantity_sold,purchase_price,cogs,selling_price))
+                orders_report.append((product_id, product_name, quantity_sold, purchase_average_price, cogs, selling_price))
+        print(orders_report)
         return orders_report
 
 
@@ -169,9 +178,9 @@ if __name__ == '__main__':
         command = input("Enter a command:\n")
         part = command.split()
         if part[0] == "save_product":
-            ecom.save_product(part[1], part[2], float(part[3]))
+            ecom.save_product(part[1], part[2], int(part[3]))
         elif part[0] == "purchase_product":
-            ecom.purchase_product(part[1], int(part[2]), float(part[3]))
+            ecom.purchase_product(part[1], int(part[2]), int(part[3]))
         elif part[0] == "order_product":
             ecom.order_product(part[1], int(part[2]))
         elif part[0] == "get_quantity_of_product":
