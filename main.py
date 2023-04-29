@@ -134,8 +134,10 @@ class Ecommerce:
                 print(f"The most popular product is {self.products[product]['name']} with {max_order} orders")
         print(order_amount_list)
 
-    # Generate a report of all orders, including the product ID, product name, quantity,
-    # price, cost of goods sold (COGS) and selling price.
+    """
+        goes through the each order placed and adds each order's details to list as tuples. purchase price is 
+        calculated with average purchase price of product and that is used to calculate Cost Of Goods Sold as well
+    """
     def get_orders_report(self):
         orders_report = []
         for product in self.orders:
