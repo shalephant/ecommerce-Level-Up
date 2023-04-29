@@ -1,4 +1,4 @@
-
+import csv
 class Ecommerce:
 
     def __init__(self):
@@ -134,12 +134,13 @@ class Ecommerce:
                 print(f"The most popular product is {self.products[product]['name']} with {max_order} orders")
         print(order_amount_list)
 
+
     """
         goes through the each order placed and adds each order's details to list as tuples. purchase price is 
         calculated with average purchase price of product and that is used to calculate Cost Of Goods Sold as well
     """
     def get_orders_report(self):
-        orders_report = []
+        orders_report = [("ID", "Name", "Sold Quantity", "Purchase Price", "COGS", "Selling Price")]
         for product in self.orders:
             for quantity, price in self.orders[product]:
                 product_id = product
@@ -149,9 +150,17 @@ class Ecommerce:
                 cogs = quantity_sold*purchase_price
                 selling_price = price
                 orders_report.append((product_id,product_name,quantity_sold,purchase_price,cogs,selling_price))
+        return orders_report
 
-        print(orders_report)
 
+    """
+        creates (or adds new orders if file is already created) a csv file and puts orders_report list inside
+    """
+    def export_orders_report(self, path="reports_order.csv"):
+        report = self.get_orders_report()
+        with open(path, "w", newline='') as orders_report:
+            write = csv.writer(orders_report)
+            write.writerows(report)
 
 
 if __name__ == '__main__':
@@ -177,6 +186,8 @@ if __name__ == '__main__':
             ecom.get_most_popular_product()
         elif part[0] == "get_orders_report":
             ecom.get_orders_report()
+        elif part[0] == "export_orders_report":
+            ecom.export_orders_report(part[1])
         elif part[0] == "exit":
             break
         else:
