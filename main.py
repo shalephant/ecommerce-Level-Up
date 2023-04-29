@@ -74,6 +74,7 @@ class Ecommerce:
                 sum_of_money += price * quantity
             average_price = sum_of_money/amount_purchased
             print(f"The average price of that product would be {average_price}")
+            return average_price
 
 
     """
@@ -133,6 +134,21 @@ class Ecommerce:
                 print(f"The most popular product is {self.products[product]['name']} with {max_order} orders")
         print(order_amount_list)
 
+    # Generate a report of all orders, including the product ID, product name, quantity,
+    # price, cost of goods sold (COGS) and selling price.
+    def get_orders_report(self):
+        orders_report = []
+        for product in self.orders:
+            for quantity, price in self.orders[product]:
+                product_id = product
+                product_name = self.products[product]['name']
+                quantity_sold = quantity
+                purchase_price = self.get_average_price(product_id)
+                cogs = quantity_sold*purchase_price
+                selling_price = price
+                orders_report.append((product_id,product_name,quantity_sold,purchase_price,cogs,selling_price))
+
+        print(orders_report)
 
 
 
@@ -157,6 +173,8 @@ if __name__ == '__main__':
             ecom.get_fewest_product()
         elif part[0] == "get_most_popular_product":
             ecom.get_most_popular_product()
+        elif part[0] == "get_orders_report":
+            ecom.get_orders_report()
         elif part[0] == "exit":
             break
         else:
