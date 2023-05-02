@@ -56,7 +56,6 @@ class Ecommerce:
             print(f"No product with id {product_id} found")
         else:
            # print(f"There is {self.products[product_id]['quantity']} units in the stock")
-            print(self.products[product_id]['quantity'])
             return int(self.products[product_id]['quantity'])
 
     """
@@ -74,12 +73,11 @@ class Ecommerce:
                 sum_of_money += price * quantity
             average_price = sum_of_money/amount_purchased
            # print(f"The average price of that product would be {average_price}")
-            print(int(average_price))
             return int(average_price)
 
 
     """
-            We find average price of ordered products subtract average price of purchased products from it to
+            We find average price of ordered products then subtract average price of purchased products from it to
             find average profit per unit. We do the same thing with total prices to find total profit
     """
     def get_product_profit(self, product_id):
@@ -87,21 +85,15 @@ class Ecommerce:
             print(f"No product with id {product_id} found")
         else:
             order_total_money = 0
-            purchase_total_money =0
             amount_ordered = 0
-            amount_purchased = 0
-            for quantity, price in self.purchases[product_id]:
-                amount_purchased += quantity
-                purchase_total_money += price * quantity
             for quantity, price in self.orders[product_id]:
                 amount_ordered += quantity
                 order_total_money += price * quantity
             order_average = order_total_money/amount_ordered
-            purchase_average = purchase_total_money/amount_purchased
+            purchase_average = self.get_average_price(product_id)
             profit_per_unit = order_average - purchase_average
             total_profit = profit_per_unit * amount_ordered
            # print(f"Profit per unit is {profit_per_unit} and total profit from the orders is {total_profit}")
-            print(int(total_profit))
             return int(total_profit)
 
     """
@@ -115,7 +107,6 @@ class Ecommerce:
             if self.products[product]['quantity'] == min_quantity:
                 fewest_product = self.products[product]['name']
        # print(f"Fewest product that is left is {fewest_product} with {min_quantity} units left")
-        print(fewest_product)
         return fewest_product
 
     """
@@ -134,7 +125,6 @@ class Ecommerce:
             if product_orders[product] == max_order:
                 popular_product = self.products[product]['name']
                # print(f"The most popular product is {popular_product} with {max_order} orders")
-        print(popular_product)
         return popular_product
 
 
@@ -149,23 +139,17 @@ class Ecommerce:
                 product_id = product
                 product_name = self.products[product]['name']
                 quantity_sold = quantity
-
-                purchase_sum_of_money = 0
-                amount_purchased = 0
-                for q, p in self.purchases[product_id]:
-                    amount_purchased += quantity
-                    purchase_sum_of_money += q * p
-
-                purchase_average_price = int(purchase_sum_of_money / amount_purchased)
+                purchase_average_price = self.get_average_price(product)
                 cogs = int(quantity_sold * purchase_average_price)
                 selling_price = price
-                orders_report.append((product_id, product_name, quantity_sold, purchase_average_price, cogs, selling_price))
-        print(orders_report)
+                orders_report.append((product_id, product_name, quantity_sold,
+                                      purchase_average_price, cogs, selling_price))
         return orders_report
 
 
     """
-        creates (or adds new orders if file is already created) a csv file and puts orders_report list inside
+        creates (or adds new orders if file is already created) a csv file and puts orders_report list inside.
+        path's name should be end with .csv file. for example "reports.csv"
     """
     def export_orders_report(self, path="reports_order.csv"):
         report = self.get_orders_report()
@@ -186,17 +170,17 @@ if __name__ == '__main__':
         elif part[0] == "order_product":
             ecom.order_product(part[1], int(part[2]))
         elif part[0] == "get_quantity_of_product":
-            ecom.get_quantity_of_product(part[1])
+            print(ecom.get_quantity_of_product(part[1]))
         elif part[0] == "get_average_price":
-            ecom.get_average_price(part[1])
+            print(ecom.get_average_price(part[1]))
         elif part[0] == "get_product_profit":
-            ecom.get_product_profit(part[1])
+            print(ecom.get_product_profit(part[1]))
         elif part[0] == "get_fewest_product":
-            ecom.get_fewest_product()
+            print(ecom.get_fewest_product())
         elif part[0] == "get_most_popular_product":
-            ecom.get_most_popular_product()
+            print(ecom.get_most_popular_product())
         elif part[0] == "get_orders_report":
-            ecom.get_orders_report()
+            print(ecom.get_orders_report())
         elif part[0] == "export_orders_report":
             ecom.export_orders_report(part[1])
         elif part[0] == "exit":
